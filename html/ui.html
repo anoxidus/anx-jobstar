@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Display</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        #stars {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 5px; 
+        }
+
+        .star {
+            color: gray;
+        }
+
+        .star.on {
+            color: #fcb023;
+        }
+    </style>
+</head>
+<body>
+    <div id="stars">
+        <i class="fa-solid fa-star star"></i>
+        <i class="fa-solid fa-star star"></i>
+        <i class="fa-solid fa-star star"></i>
+        <i class="fa-solid fa-star star"></i>
+        <i class="fa-solid fa-star star"></i>
+    </div>
+    <script>
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+
+            if (data.type === 'updateStars') {
+                const stars = document.querySelectorAll('.star');
+                stars.forEach((star, index) => {
+                    star.classList.toggle('on', index < data.stars);
+                });
+            } else if (data.type === 'setConfig') {
+                const position = data.position;
+                const starSize = data.starSize;
+                const starsContainer = document.getElementById("stars");
+
+                starsContainer.style.top = `${position.y * 100}%`;
+                starsContainer.style.left = `${position.x * 100}%`;
+
+                const stars = document.querySelectorAll('.star'); 
+                stars.forEach((star) => {
+                    star.style.fontSize = `${starSize}px`; 
+                });
+            }
+        });
+    </script>
+</body>
+</html>
